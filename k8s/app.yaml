@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_ENV: "dev"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+stringData:
+  API_TOKEN: "fake-value-for-now"   # never a real secret
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: golden-path
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: golden-path }
+  template:
+    metadata:
+      labels: { app: golden-path }
+    spec:
+      containers:
+        - name: app
+          image: golden-path:v1
+          imagePullPolicy: IfNotPresent
+          ports: [{ containerPort: 8000 }]
+          envFrom:
+            - configMapRef: { name: app-config }
+            - secretRef: { name: app-secret }
+          readinessProbe:
+            httpGet: { path: /health, port: 8000 }
+            initialDelaySeconds: 3
+          livenessProbe:
+            httpGet: { path: /health, port: 8000 }
+            initialDelaySeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: golden-path
+spec:
+  selector: { app: golden-path }
+  ports: [{ port: 80, targetPort: 8000 }]
