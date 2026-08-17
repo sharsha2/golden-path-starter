@@ -12,7 +12,7 @@ jobs:
       - name: Build image
         run: docker build -t golden-path:ci .
       - name: Trivy scan
-        uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5 # v0.30.0
+        uses: aquasecurity/trivy@sha256:62b1e65e8869bc4b4c6aa4fa2b21595256c7c2f6018a9d9ad61caf87187c1969 # v0.74.0
         with:
           image-ref: golden-path:ci
           severity: HIGH,CRITICAL
