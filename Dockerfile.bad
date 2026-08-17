@@ -1,0 +1,4 @@
+FROM eclipse-temurin:21-jdk
+COPY . .
+RUN ./mvnw -q clean package -DskipTests
+CMD ["java", "-jar", "target/golden-path-0.0.1-SNAPSHOT.jar"]
