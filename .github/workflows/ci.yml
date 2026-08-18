@@ -16,3 +16,19 @@ jobs:
         with:
           image-ref: golden-path:ci
           severity: HIGH,CRITICAL
+
+  oidc-demo:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # lets the job request an OIDC token
+      contents: read
+    steps:
+      - name: Mint an OIDC token and show its claims
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        with:
+          script: |
+            const token = await core.getIDToken();
+            const claims = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+            const { sub, aud, repository, ref, iat, exp } = claims;
+            core.info(JSON.stringify({ sub, aud, repository, ref, iat, exp }, null, 2));
+            core.info(`Token lifetime: ${(exp - iat) / 60} minutes`);
