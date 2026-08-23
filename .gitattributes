@@ -1,2 +1,7 @@
 /mvnw text eol=lf
 *.cmd text eol=crlf
+
+# Dockerfile.bad is the deliberate anti-pattern kept for contrast in the README.
+# export-ignore keeps it out of `git archive` output and, with `file_mode: git`
+# in the Scorecard workflow, out of the supply-chain analysis.
+/Dockerfile.bad export-ignore
