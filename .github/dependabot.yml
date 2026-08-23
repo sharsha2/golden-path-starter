@@ -1,0 +1,43 @@
+# Dependabot keeps the build's inputs current. Scorecard's Dependency-Update-Tool
+# check looks for exactly this file; the Vulnerabilities and Pinned-Dependencies
+# checks benefit from it staying enabled.
+version: 2
+updates:
+  # ---- Java dependencies (pom.xml) ----
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    groups:
+      spring-boot:
+        patterns:
+          - "org.springframework.boot:*"
+
+  # ---- GitHub Actions (keeps the pinned SHAs from going stale) ----
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"
+
+  # ---- Base images in the container builds ----
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "docker"
+    ignore:
+      # Dockerfile.bad is the deliberate anti-pattern; leave it unpinned.
+      - dependency-name: "eclipse-temurin"
+        update-types: ["version-update:semver-major"]
