@@ -2,6 +2,6 @@
 *.cmd text eol=crlf
 
 # Dockerfile.bad is the deliberate anti-pattern kept for contrast in the README.
-# export-ignore keeps it out of `git archive` output and, with `file_mode: git`
-# in the Scorecard workflow, out of the supply-chain analysis.
+# export-ignore keeps it out of `git archive` output, and therefore out of the
+# Scorecard analysis, which reads the repository as an archive by default.
 /Dockerfile.bad export-ignore

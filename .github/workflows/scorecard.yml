@@ -58,9 +58,10 @@ jobs:
           #     of the value entered here.
           publish_results: true
 
-          # Respect .gitattributes export-ignore, so the deliberately-insecure
-          # Dockerfile.bad is excluded from the analysis.
-          file_mode: git
+          # Leave file_mode at its default (archive). The tarball honours the
+          # export-ignore on Dockerfile.bad, so the deliberate anti-pattern is
+          # not analysed. Do NOT set `file_mode: git` here -- git mode exists to
+          # *include* export-ignored files, which is the opposite of what we want.
 
       # Upload the results as artifacts (optional). Commenting out will disable uploads of run results in SARIF
       # format to the repository Actions tab.
